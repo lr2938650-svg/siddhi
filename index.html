@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="hi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A Message For You</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Cormorant Garamond", serif;
+      }
+
+      body {
+        background: #000;
+        color: #f3e8c6;
+        overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url("https://images.unsplash.com/photo-1523293822076-81d123d63d87?auto=format&fit=crop&w=1200&q=60")
+          center/cover no-repeat;
+        opacity: 0.2;
+        filter: blur(5px);
+        z-index: -1;
+      }
+
+      /* Intro Screen */
+      #intro {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+        font-size: 2rem;
+        line-height: 1.4;
+        color: #f8e6c8;
+        opacity: 1;
+        transition: opacity 1.3s ease;
+        letter-spacing: 1px;
+        z-index: 999;
+      }
+
+      #intro.fadeOut {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .fade-text {
+        opacity: 0;
+        animation: fadeIntro 3s forwards;
+      }
+
+      @keyframes fadeIntro {
+        0% {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Main Message Box */
+      .box {
+        max-width: 850px;
+        margin: auto;
+        padding: 50px 25px;
+        font-size: 1.55rem;
+        line-height: 2.1;
+        opacity: 0;
+        transition: opacity 1.6s ease;
+      }
+      .box.visible {
+        opacity: 1;
+      }
+
+      .line {
+        opacity: 0;
+        transform: translateY(25px);
+        transition: all 0.7s ease;
+        margin-bottom: 28px;
+      }
+      .line.visibleLine {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .highlight {
+        color: #ffda9b;
+        text-shadow: 0 0 10px #b99252;
+      }
+
+      footer {
+        text-align: center;
+        padding: 40px;
+        opacity: 0.7;
+        font-size: 1rem;
+        letter-spacing: 1px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- INTRO SCREEN -->
+    <div id="intro">
+      <div class="fade-text">
+        <b>कुछ पल…<br />बस अपने लिए।</b><br /><br />
+        शांत होकर बैठो,<br />
+        और मन से इसे पढ़ो।
+      </div>
+    </div>
+
+    <!-- MAIN MESSAGE -->
+    <div class="box" id="contentBox">
+      <p class="line">
+        मैं जानता हूँ, हम एक-दूसरे को ज़्यादा नहीं जानते… और तुम introvert हो—
+        इसलिए ये बातें मैं बहुत softly, बहुत respect से कह रहा हूँ।
+      </p>
+
+      <p class="line">
+        तुम चाहे realize करो या नहीं, तुम्हारे अंदर एक अलग ही तरह की soft, calm,
+        beautiful clarity है।
+      </p>
+
+      <p class="line">और शायद यही चीज़ तुम्हें सबसे अलग बनाती है।</p>
+
+      <p class="line">
+        <span class="highlight">“Perfect बनने की कोशिश मत करना।”</span>
+      </p>
+
+      <p class="line">
+        क्योंकि perfect बनते-बनते लोग सबसे पहले अपनी originality खो देते हैं।
+      </p>
+
+      <p class="line">
+        और वो originality… जो सबसे पहले तुम्हारी मम्मी–पापा ने तुम्हें दी, वो
+        दुनिया की कोई भी जगह replace नहीं कर सकती।
+      </p>
+
+      <p class="line">
+        तो फिर क्यों किसी के लिए अपनी असली personality बदली जाए?
+      </p>
+
+      <p class="line">
+        <b class="highlight"
+          >तुम जैसी हो, वैसी रहो। यही तुम्हारी सबसे बड़ी strength है।</b
+        >
+      </p>
+
+      <p class="line">
+        ज़िंदगी में बहुत phases आएँगे। लोग मिलेंगे, बदलेंगे, और चले भी जाएँगे।
+      </p>
+
+      <p class="line">
+        कभी–कभी हम किसी एक इंसान पर इतना रुक जाते हैं कि ज़िंदगी की बाकी सारी
+        जगहें पीछे छूट जाती हैं।
+      </p>
+
+      <p class="line">
+        <span class="highlight"
+          >अगर हम एक ही जगह रुक गए, तो हम आगे कभी नहीं बढ़ पाएँगे।</span
+        >
+      </p>
+
+      <p class="line">
+        और हाँ… हर कोई साथ नहीं रहता। कुछ बस time-pass होते हैं, कुछ फायदा उठाते
+        हैं, और कुछ… उतने ही होते हैं जितना उन्हें तुमसे चाहिए होता है।
+      </p>
+
+      <p class="line">लेकिन इसका मतलब ये नहीं कि तुम बुरे हो या कमज़ोर हो।</p>
+
+      <p class="line">
+        <b class="highlight"
+          >इसका मतलब सिर्फ इतना है— तुम “use होने के लिए” नहीं बनी हो।</b
+        >
+      </p>
+
+      <p class="line">
+        और हाँ, एक बात मैं honesty से कहना चाहता हूँ— तुम्हारे अंदर अभी भी एक
+        हल्की-सी childlike innocence है।
+      </p>
+
+      <p class="line">
+        वह मासूमियत आजकल rare है। यही तुम्हारी पहचान है, यही तुम्हारा charm है।
+      </p>
+
+      <p class="line">कृपया… इसे दुनिया की वजह से खोने मत देना।</p>
+
+      <p class="line">
+        <span class="highlight"
+          >हर चीज़ mature होना अच्छी नहीं होती। कभी–कभी वही मासूम हिस्सा हमें
+          बचाए रखता है।</span
+        >
+      </p>
+
+      <p class="line">
+        और देखो— मैं ये सब इसलिए नहीं कह रहा क्योंकि मैं तुम्हारा कोई बहुत
+        क़रीबी या कोई बड़ा “relation” हूँ।
+      </p>
+
+      <p class="line">
+        न ही इसलिए कि मुझे तुम्हारी ज़िंदगी पर कोई हक़ है या instructions देने
+        का इरादा है।
+      </p>
+
+      <p class="line">
+        <b
+          >मैं तो बस उतना ही बोल रहा हूँ जितना genuinely मैंने तुम्हें observe
+          किया है।</b
+        >
+      </p>
+
+      <p
+        class="line highlight"
+        style="font-size: 1.8rem; margin-top: 40px; line-height: 1.6"
+      >
+        ये कोई message नहीं, न कोई judgement, न कोई attempt कि तुम बदलो।
+      </p>
+
+      <p class="line">
+        ये बस उतना ही है जितना मैंने तुम्हारी simplicity में कुछ अच्छा देखा— और
+        वही तुमसे share कर दिया।
+      </p>
+
+      <p class="line">
+        अगर मेरी किसी बात से तुम्हें थोड़ा भी गलत लगा हो, तो I’m genuinely
+        sorry.
+      </p>
+
+      <p class="line">
+        लेकिन मेरी respect तुम्हारे लिए बिल्कुल उतनी ही है— pure, quiet, and
+        without expectations.
+      </p>
+
+      <p class="line highlight" style="font-weight: bold; font-size: 1.6rem">
+        और अगर ये पढ़कर तुम्हारे चेहरे पर हल्की-सी मुस्कान भी आई— तो समझना… किसी
+        ने सच्चे मन से तुम्हारे लिए अच्छी बात कही थी।
+      </p>
+    </div>
+
+    <footer>Made with calmness, respect & honesty ✨</footer>
+
+    <script>
+      window.onload = () => {
+        setTimeout(() => {
+          document.getElementById("intro").classList.add("fadeOut");
+          document.getElementById("contentBox").classList.add("visible");
+          revealLines();
+        }, 3500);
+      };
+
+      let lines = document.querySelectorAll(".line");
+      let index = 0;
+
+      function revealLines() {
+        let interval = setInterval(() => {
+          if (index >= lines.length) return clearInterval(interval);
+          lines[index].classList.add("visibleLine");
+          index++;
+        }, 350);
+      }
+    </script>
+  </body>
+</html>
