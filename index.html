@@ -27,7 +27,6 @@ body.dark{
  --sender:#6a5cff;
  --receiver:#ff6fae;
 }
-
 *{box-sizing:border-box}
 body{
  margin:0;
@@ -39,9 +38,7 @@ body{
  align-items:center;
  padding:14px;
  color:var(--text);
- transition:.3s;
 }
-
 .card{
  width:100%;
  max-width:420px;
@@ -50,7 +47,6 @@ body{
  padding:20px;
  box-shadow:0 25px 60px rgba(0,0,0,.15);
 }
-
 .hidden{display:none}
 input,button{
  width:100%;
@@ -64,15 +60,8 @@ button{cursor:pointer}
 .primary{background:linear-gradient(135deg,#b49bff,#ff8dc7);color:#fff}
 .secondary{background:#e8e8f3}
 
-.chatroom{
- background:var(--sky);
- border-radius:18px;
- padding:12px;
-}
-.chatbox{
- height:280px;
- overflow-y:auto;
-}
+.chatroom{background:var(--sky);border-radius:18px;padding:12px}
+.chatbox{height:280px;overflow-y:auto}
 
 .bubble{
  padding:10px 14px;
@@ -84,13 +73,6 @@ button{cursor:pointer}
 .me{margin-left:auto;background:var(--sender)}
 .other{background:var(--receiver)}
 
-.tick{
- font-size:11px;
- position:absolute;
- bottom:-14px;
- right:8px;
-}
-
 img{
  max-width:100%;
  border-radius:12px;
@@ -99,10 +81,7 @@ img{
 }
 img.reveal{filter:none}
 
-.voice{
- width:100%;
- margin-top:6px;
-}
+.voice{width:100%;margin-top:6px}
 
 .topbar{
  display:flex;
@@ -110,10 +89,7 @@ img.reveal{filter:none}
  align-items:center;
  margin-bottom:6px;
 }
-.toggle{
- cursor:pointer;
- font-size:14px;
-}
+.toggle{cursor:pointer}
 
 .timer{
  display:flex;
@@ -121,10 +97,6 @@ img.reveal{filter:none}
  gap:8px;
  font-size:12px;
  margin-top:6px;
-}
-
-@media(max-width:420px){
- .chatbox{height:240px}
 }
 </style>
 </head>
@@ -137,9 +109,32 @@ img.reveal{filter:none}
  <button class="primary" onclick="openMessage()">Continue</button>
 </div>
 
-<!-- STEP 2 -->
+<!-- STEP 2 (UPDATED) -->
 <div class="card hidden" id="step2">
- <p>Start Blind Friendship?</p>
+ <div style="font-size:14px;line-height:1.7">
+  Hey, ek baat honestly bolni thi 💗<br><br>
+
+  Main zyada planning ya pressure me believe nahi karta,
+  bas ek simple aur genuine connection chahta hoon.<br><br>
+
+  Ye koi proposal ya commitment nahi hai —
+  bas ek one-to-one friendship,
+  jahan hum bina expectations ke baat kar sakein.<br><br>
+
+  Tumhara past jo bhi raha ho,
+  main usse judge nahi karta aur na hi interfere karna chahta hoon.<br><br>
+
+  Agar tum comfortable ho,
+  toh hum calmly baat kar sakte hain,
+  ek-dusre ko thoda better samajhne ke liye.<br><br>
+
+  Aur agar nahi,
+  toh bilkul theek —
+  main tumhare decision ki respect karunga 🌸<br><br>
+
+  <b>Tum kya chahti ho?</b>
+ </div>
+
  <button class="primary" onclick="yesFlow()">Yes</button>
  <button class="secondary" onclick="location.reload()">No</button>
 </div>
@@ -186,9 +181,7 @@ const db=firebase.database();
 
 timer.oninput=()=>tval.innerText=timer.value+"s";
 
-function toggleTheme(){
- document.body.classList.toggle("dark");
-}
+function toggleTheme(){document.body.classList.toggle("dark")}
 
 function openMessage(){
  if(inviteCode.value!==INVITE_CODE)return alert("Wrong invite code");
