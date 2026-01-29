@@ -12,94 +12,31 @@
 
 <style>
 :root{
- --bg:#f3e9ff;
- --card:#ffffff;
- --text:#3b3b3b;
- --sky:#eaf6ff;
- --sender:#e6d9ff;
- --receiver:#ffe1ec;
+ --bg:#f3e9ff;--card:#fff;--text:#333;
+ --sender:#e6d9ff;--receiver:#ffe1ec;
 }
-body.dark{
- --bg:#0f1117;
- --card:#171a23;
- --text:#f1f1f1;
- --sky:#12151e;
- --sender:#6a5cff;
- --receiver:#ff6fae;
-}
-*{box-sizing:border-box}
-body{
- margin:0;
- min-height:100vh;
- background:linear-gradient(135deg,var(--bg),#cfd9ff);
- font-family:Poppins;
- display:flex;
- justify-content:center;
- align-items:center;
- padding:14px;
- color:var(--text);
-}
-.card{
- width:100%;
- max-width:420px;
- background:var(--card);
- border-radius:22px;
- padding:20px;
- box-shadow:0 25px 60px rgba(0,0,0,.15);
-}
+body{margin:0;min-height:100vh;
+background:linear-gradient(135deg,var(--bg),#cfd9ff);
+font-family:Poppins;display:flex;align-items:center;justify-content:center}
+.card{max-width:420px;width:100%;background:var(--card);
+border-radius:22px;padding:20px;box-shadow:0 25px 60px rgba(0,0,0,.15)}
 .hidden{display:none}
-input,button{
- width:100%;
- padding:13px;
- border-radius:14px;
- border:none;
- font-family:Poppins;
- margin-top:10px;
-}
-button{cursor:pointer}
+input,button{width:100%;padding:13px;border-radius:14px;border:none;margin-top:10px}
 .primary{background:linear-gradient(135deg,#b49bff,#ff8dc7);color:#fff}
-.secondary{background:#e8e8f3}
-
-.chatroom{background:var(--sky);border-radius:18px;padding:12px}
+.secondary{background:#eee}
 .chatbox{height:280px;overflow-y:auto}
-
-.bubble{
- padding:10px 14px;
- border-radius:16px;
- margin-bottom:12px;
- max-width:80%;
- position:relative;
-}
+.bubble{padding:10px 14px;border-radius:16px;margin-bottom:16px;max-width:80%;position:relative}
 .me{margin-left:auto;background:var(--sender)}
 .other{background:var(--receiver)}
-
-img{
- max-width:100%;
- border-radius:12px;
- filter:blur(6px);
- cursor:pointer;
-}
+.tick{font-size:11px;position:absolute;bottom:-14px;right:8px;color:#777}
+.countdown{font-size:10px;opacity:.6}
+#status{font-size:12px;opacity:.7}
+.typing{font-size:12px;font-style:italic;opacity:.6}
+img{max-width:100%;border-radius:12px;filter:blur(6px);cursor:pointer}
 img.reveal{filter:none}
-
-.voice{width:100%;margin-top:6px}
-
-.topbar{
- display:flex;
- justify-content:space-between;
- align-items:center;
- margin-bottom:6px;
-}
-.toggle{cursor:pointer}
-
-.timer{
- display:flex;
- align-items:center;
- gap:8px;
- font-size:12px;
- margin-top:6px;
-}
 </style>
 </head>
+
 <body>
 
 <!-- STEP 1 -->
@@ -109,12 +46,12 @@ img.reveal{filter:none}
  <button class="primary" onclick="openMessage()">Continue</button>
 </div>
 
-<!-- STEP 2 (UPDATED) -->
+<!-- STEP 2 -->
 <div class="card hidden" id="step2">
- <div style="font-size:14px;line-height:1.7">
+ <p style="line-height:1.7">
   Hey, ek baat honestly bolni thi 💗<br><br>
 
-  Main zyada planning ya pressure me believe nahi karta,
+  Main zyada planning ya sochne me believe nahi karta,
   bas ek simple aur genuine connection chahta hoon.<br><br>
 
   Ye koi proposal ya commitment nahi hai —
@@ -130,13 +67,24 @@ img.reveal{filter:none}
 
   Aur agar nahi,
   toh bilkul theek —
-  main tumhare decision ki respect karunga 🌸<br><br>
+  main tumhare decision ki respect karta hu 🌸<br><br>
 
-  <b>Tum kya chahti ho?</b>
- </div>
-
+  <b>Tum kya chahti ho?
+ </p>
  <button class="primary" onclick="yesFlow()">Yes</button>
- <button class="secondary" onclick="location.reload()">No</button>
+ <button class="secondary" onclick="showNo()">No</button>
+</div>
+
+<!-- NO MESSAGE -->
+<div class="card hidden" id="noMsg">
+ <p>
+  Thanks for the clarity.<br>
+  Main cheezon ko simple rakhta hoon.<br>
+  Jo jaisa hai, theek hai. <br>
+ <b>Life is too short: get clarity and move forward<br></b>
+  I wish you the best.<br>
+  Take care.
+ </p>
 </div>
 
 <!-- LOGIN -->
@@ -147,31 +95,20 @@ img.reveal{filter:none}
 
 <!-- CHAT -->
 <div class="card hidden" id="stepChat">
- <div class="topbar">
-  <b>Blind Friendship</b>
-  <div class="toggle" onclick="toggleTheme()">🌙</div>
- </div>
+ <b>Blind Friendship</b>
+ <div id="status">offline</div>
 
- <div class="chatroom">
-  <div class="chatbox" id="chat"></div>
- </div>
+ <div class="chatbox" id="chat"></div>
+ <div class="typing" id="typing"></div>
 
- <div class="timer">
-  ⏳ Auto delete:
-  <input type="range" min="10" max="300" value="60" id="timer">
-  <span id="tval">60s</span>
- </div>
-
- <input type="file" id="img" accept="image/*">
- <input id="msg" placeholder="Type something…">
+ <input id="msg" placeholder="Type something…" oninput="setTyping(true)">
  <button class="primary" onclick="sendMsg()">Send</button>
- <button class="secondary" onclick="recordVoice()">🎶 Voice</button>
 </div>
 
 <script>
 const INVITE_CODE="BLIND2026";
 const CHAT_CODE="ONLYUS";
-let ROOM="", user="", mediaRecorder, chunks=[];
+let user="",ROOM="ONLYUS";
 
 firebase.initializeApp({
  apiKey:"AIzaSyAdpLNU2c-C5KxJv2weJECSpoghz_NGNtM",
@@ -179,25 +116,28 @@ firebase.initializeApp({
 });
 const db=firebase.database();
 
-timer.oninput=()=>tval.innerText=timer.value+"s";
-
-function toggleTheme(){document.body.classList.toggle("dark")}
-
 function openMessage(){
- if(inviteCode.value!==INVITE_CODE)return alert("Wrong invite code");
+ if(inviteCode.value!==INVITE_CODE) return alert("Wrong code");
  user=inviteName.value;
  step1.classList.add("hidden");
  step2.classList.remove("hidden");
 }
+
 function yesFlow(){
  step2.classList.add("hidden");
  stepLogin.classList.remove("hidden");
 }
+
+function showNo(){
+ step2.classList.add("hidden");
+ noMsg.classList.remove("hidden");
+}
+
 function enterChat(){
- if(chatCode.value!==CHAT_CODE)return alert("Wrong chat code");
- ROOM=CHAT_CODE;
+ if(chatCode.value!==CHAT_CODE) return alert("Wrong chat code");
  stepLogin.classList.add("hidden");
  stepChat.classList.remove("hidden");
+ setOnline();
  listen();
 }
 
@@ -205,55 +145,59 @@ function enc(t){return CryptoJS.AES.encrypt(t,ROOM).toString()}
 function dec(t){return CryptoJS.AES.decrypt(t,ROOM).toString(CryptoJS.enc.Utf8)}
 
 function sendMsg(){
- if(!msg.value && !img.files[0])return;
- const expire=Date.now()+timer.value*1000;
- const ref=db.ref(`rooms/${ROOM}/chat`).push({u:user,t:msg.value?enc(msg.value):null,expire});
- if(img.files[0]){
-  const r=new FileReader();
-  r.onload=e=>ref.update({img:e.target.result});
-  r.readAsDataURL(img.files[0]);
- }
- msg.value="";img.value="";
+ if(!msg.value) return;
+ const ref=db.ref(`rooms/${ROOM}/chat`).push({
+  u:user,
+  t:enc(msg.value),
+  time:Date.now(),
+  seen:false
+ });
+ msg.value="";
+ setTyping(false);
 }
 
 function listen(){
  db.ref(`rooms/${ROOM}/chat`).on("child_added",s=>{
   const d=s.val();
-  if(d.expire && Date.now()>d.expire){s.ref.remove();return}
   const div=document.createElement("div");
   div.className="bubble "+(d.u===user?"me":"other");
-  if(d.t)div.innerText=dec(d.t);
-  if(d.img){
-   const i=document.createElement("img");
-   i.src=d.img;
-   i.onclick=()=>i.classList.toggle("reveal");
-   div.appendChild(i);
-  }
-  if(d.audio){
-   const a=document.createElement("audio");
-   a.src=d.audio;a.controls=true;a.className="voice";
-   div.appendChild(a);
-  }
+  div.innerHTML=dec(d.t);
+
+  const tick=document.createElement("div");
+  tick.className="tick";
+  tick.innerText=d.seen?"✔✔":"✔";
+  div.appendChild(tick);
+
+  const cd=document.createElement("div");
+  cd.className="countdown";
+  div.appendChild(cd);
+
   chat.appendChild(div);
   chat.scrollTop=chat.scrollHeight;
+
+  let sec=60;
+  const i=setInterval(()=>{
+   cd.innerText=sec+"s";
+   if(--sec<0){clearInterval(i);div.remove()}
+  },1000);
+
+  if(d.u!==user) s.ref.update({seen:true});
  });
 }
 
-function recordVoice(){
- navigator.mediaDevices.getUserMedia({audio:true}).then(s=>{
-  mediaRecorder=new MediaRecorder(s);
-  mediaRecorder.start();
-  chunks=[];
-  mediaRecorder.ondataavailable=e=>chunks.push(e.data);
-  setTimeout(()=>{
-   mediaRecorder.stop();
-   mediaRecorder.onstop=()=>{
-    const blob=new Blob(chunks,{type:"audio/webm"});
-    const r=new FileReader();
-    r.onload=()=>db.ref(`rooms/${ROOM}/chat`).push({u:user,audio:r.result});
-    r.readAsDataURL(blob);
-   }
-  },3000);
+function setOnline(){
+ const ref=db.ref(`rooms/${ROOM}/presence/${user}`);
+ ref.set(true);
+ ref.onDisconnect().set(false);
+ db.ref(`rooms/${ROOM}/presence`).on("value",s=>{
+  status.innerText=s.numChildren()>1?"online":"last seen";
+ });
+}
+
+function setTyping(v){
+ db.ref(`rooms/${ROOM}/typing/${user}`).set(v);
+ db.ref(`rooms/${ROOM}/typing`).on("value",s=>{
+  typing.innerText=[...Object.values(s.val()||{})].includes(true)?"typing…":"";
  });
 }
 </script>
