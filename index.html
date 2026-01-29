@@ -1,246 +1,100 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Blind Friendship 💗</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
-      rel="stylesheet"
-    />
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-    <style>
-      :root {
-        --bg: #0f0f14;
-        --card: #17171f;
-        --accent: #ff5c8a;
-        --soft: #2a2a35;
-        --text: #fff;
-        --muted: #b5b5c3;
-      }
-      * {
-        box-sizing: border-box;
-      }
-      body {
-        margin: 0;
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: Poppins;
-        background: radial-gradient(circle at top, #1c1c28, var(--bg));
-        color: var(--text);
-      }
-      .card {
-        width: 100%;
-        max-width: 420px;
-        background: linear-gradient(180deg, var(--card), #121218);
-        border-radius: 18px;
-        padding: 24px;
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
-      }
-      .hidden {
-        display: none;
-      }
-      input,
-      button {
-        width: 100%;
-        padding: 12px;
-        border-radius: 14px;
-        border: none;
-        margin-top: 10px;
-      }
-      input {
-        background: var(--soft);
-        color: var(--text);
-      }
-      button {
-        background: linear-gradient(135deg, var(--accent), #ff85a8);
-        font-weight: 500;
-        cursor: pointer;
-      }
-      .chatbox {
-        height: 260px;
-        overflow-y: auto;
-        background: var(--soft);
-        padding: 14px;
-        border-radius: 14px;
-        margin-bottom: 10px;
-      }
-      .bubble {
-        background: #242433;
-        padding: 8px 12px;
-        border-radius: 12px;
-        margin-bottom: 6px;
-        font-size: 14px;
-        max-width: 85%;
-        position: relative;
-      }
-      .me {
-        background: #ff5c8a;
-        color: #000;
-        margin-left: auto;
-      }
-      .tick {
-        font-size: 11px;
-        color: #000;
-        position: absolute;
-        bottom: -14px;
-        right: 6px;
-      }
-      .small {
-        font-size: 12px;
-        color: var(--muted);
-        text-align: center;
-      }
-      img {
-        border-radius: 10px;
-        margin-top: 6px;
-        max-width: 100%;
-        filter: blur(8px);
-        cursor: pointer;
-        transition: 0.3s;
-      }
-      img.reveal {
-        filter: blur(0);
-      }
-    </style>
-  </head>
-  <body>
-    <!-- LOGIN -->
-    <div class="card" id="login">
-      <input id="username" placeholder="Your Name" />
-      <input id="room" placeholder="Invite Code" />
-      <button type="button" onclick="enter()">Enter Blind Friendship</button>
-      <div class="small">Private • Encrypted • Real-time</div>
-    </div>
+<head>
+<meta charset="UTF-8">
+<title>Blind Friendship 💗</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<style>
+:root{--bg:#0f0f14;--card:#17171f;--accent:#ff5c8a;--soft:#2a2a35;--text:#fff;--muted:#b5b5c3}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:Poppins;background:radial-gradient(circle at top,#1c1c28,var(--bg));color:var(--text)}
+.card{width:100%;max-width:430px;background:linear-gradient(180deg,var(--card),#121218);border-radius:18px;padding:24px;box-shadow:0 30px 60px rgba(0,0,0,.6)}
+.hidden{display:none}
+input,button{width:100%;padding:12px;border-radius:14px;border:none;margin-top:10px}
+input{background:var(--soft);color:var(--text)}
+button{background:linear-gradient(135deg,var(--accent),#ff85a8);font-weight:500;cursor:pointer}
+.secondary{background:#2a2a35;color:#fff}
+.msg{background:#2a2a35;padding:16px;border-radius:14px;line-height:1.6;font-size:14px}
+.actions{display:flex;gap:10px;margin-top:12px}
+.small{text-align:center;font-size:12px;color:var(--muted)}
+.chatbox{height:260px;overflow-y:auto;background:var(--soft);padding:14px;border-radius:14px;margin-bottom:10px}
+.bubble{background:#242433;padding:8px 12px;border-radius:12px;margin-bottom:18px;font-size:14px;max-width:85%;position:relative}
+.me{background:#ff5c8a;color:#000;margin-left:auto}
+.tick{font-size:11px;position:absolute;bottom:-14px;right:6px}
+img{max-width:100%;border-radius:10px;filter:blur(8px);cursor:pointer}
+img.reveal{filter:blur(0)}
+.status{font-size:12px;text-align:center;color:var(--muted);margin-bottom:6px}
+</style>
+</head>
+<body>
 
-    <!-- CHAT -->
-    <div class="card hidden" id="chatCard">
-      <div class="small">Blind Friendship 💬</div>
-      <div class="chatbox" id="chat"></div>
-      <div class="small" id="typing"></div>
-      <input type="file" id="img" accept="image/*" />
-      <input id="msg" placeholder="Type a message…" />
-      <button onclick="sendMsg()">Send</button>
-    </div>
+<!-- STEP 1 -->
+<div class="card" id="step1">
+  <input id="inviteName" placeholder="Your Name">
+  <input id="inviteCode" placeholder="Invite Code">
+  <button onclick="openMessage()">Continue</button>
+  <div class="small">Private invitation</div>
+</div>
 
-    <script>
-      // 🔐 INVITE & CHAT ROOM CODES
-      const INVITE_CODE = "BLIND2026"; // entry gate
-      const CHAT_ROOM_CODE = "ONLYUS"; // encryption + room key
+<!-- STEP 2 -->
+<div class="card hidden" id="step2">
+  <div class="msg">Hey, ek baat simple aur honestly puchni thi.<br><br>Main zyada sochne mein believe nahi karta, isliye seedha bol raha hoon.<br><br>Main tumhe thoda better jaanne ke liye ek normal, one-to-one friendship start karna chahta hoon — bina pressure, bina expectations.<br><br>Mujhe pata hai tumhara past raha hai, aur main usme interfere nahi karna chahta.<br><br>Ye bas ek blend friendship ka idea hai — pehle friends, phir dheere-dheere ek-dusre ko samajhna.<br><br>Agar tum comfortable ho, toh batao. Aur agar nahi, toh bhi bilkul theek — main respect karunga.<br><br>Life short hai, isliye clarity chahiye thi.<br><br>Tumhara kya vichaar hai?</div>
+  <div class="actions">
+    <button onclick="yesFlow()">Yes</button>
+    <button class="secondary" onclick="noFlow()">No</button>
+  </div>
+  <div class="small">Max 3 attempts</div>
+</div>
 
-      // ✅ FIREBASE CONFIG (CONNECTED)
-      const firebaseConfig = {
-        apiKey: "AIzaSyAdpLNU2c-C5KxJv2weJECSpoghz_NGNtM",
-        authDomain: "soulroom-4e31d.firebaseapp.com",
-        databaseURL:
-          "https://soulroom-4e31d-default-rtdb.asia-southeast1.firebasedatabase.app",
-        projectId: "soulroom-4e31d",
-        storageBucket: "soulroom-4e31d.firebasestorage.app",
-        messagingSenderId: "139421380646",
-        appId: "1:139421380646:web:8dc4a4e166291102d2f6e7",
-        measurementId: "G-58EWTHJZXS",
-      };
+<!-- STEP NO -->
+<div class="card hidden" id="stepNo">
+  <div class="msg">Thanks for clarity.<br>Main cheezon ko simple rakhta hoon.<br>Jo jaisa hai, theek hai.<br>I wish you the best.<br>Take care</div>
+</div>
 
-      firebase.initializeApp(firebaseConfig);
-      const db = firebase.database();
+<!-- LOGIN -->
+<div class="card hidden" id="stepLogin">
+  <input id="chatCode" placeholder="Secret Chat Code">
+  <button onclick="enterChat()">Enter Chat</button>
+</div>
 
-      let user = "";
+<!-- CHAT -->
+<div class="card hidden" id="stepChat">
+  <div class="status" id="status">Offline</div>
+  <div class="chatbox" id="chat"></div>
+  <div class="small" id="typing"></div>
+  <input type="file" id="img" accept="image/*">
+  <input id="msg" placeholder="Type message…">
+  <button onclick="sendMsg()">Send</button>
+  <button onclick="recordVoice()">🎙 Voice</button>
+</div>
 
-      function enter() {
-        user = username.value.trim();
-        if (room.value.trim() !== INVITE_CODE || !user) {
-          alert("Invalid invite code");
-          return;
-        }
-        login.classList.add("hidden");
-        chatCard.classList.remove("hidden");
-        listen();
-      }
+<script>
+const INVITE_CODE="BLIND2026";
+const CHAT_CODE="ONLYUS";
+let attempts=0,user="";
 
-      // 🔐 Encryption helpers
-      function encrypt(text) {
-        return CryptoJS.AES.encrypt(text, CHAT_ROOM_CODE).toString();
-      }
-      function decrypt(text) {
-        return CryptoJS.AES.decrypt(text, CHAT_ROOM_CODE).toString(
-          CryptoJS.enc.Utf8,
-        );
-      }
+firebase.initializeApp({apiKey:"AIzaSyAdpLNU2c-C5KxJv2weJECSpoghz_NGNtM",authDomain:"soulroom-4e31d.firebaseapp.com",databaseURL:"https://soulroom-4e31d-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"soulroom-4e31d",storageBucket:"soulroom-4e31d.firebasestorage.app",messagingSenderId:"139421380646",appId:"1:139421380646:web:8dc4a4e166291102d2f6e7"});
+const db=firebase.database();
 
-      function sendMsg() {
-        if (msg.value === "" && !img.files[0]) return;
-        const ref = db.ref("rooms/" + CHAT_ROOM_CODE).push();
-        const data = { user, time: Date.now(), seen: false };
+function openMessage(){if(inviteCode.value!==INVITE_CODE||!inviteName.value)return alert('Invalid');user=inviteName.value;step1.classList.add('hidden');step2.classList.remove('hidden');}
+function yesFlow(){if(++attempts>3)return;step2.classList.add('hidden');stepLogin.classList.remove('hidden');}
+function noFlow(){if(++attempts>=3){step2.classList.add('hidden');stepNo.classList.remove('hidden');}}
+function enterChat(){if(chatCode.value!==CHAT_CODE)return alert('Wrong code');stepLogin.classList.add('hidden');stepChat.classList.remove('hidden');db.ref('users/'+user).set({online:true,last:Date.now()});listen();}
 
-        if (msg.value) data.text = encrypt(msg.value);
+function enc(t){return CryptoJS.AES.encrypt(t,CHAT_CODE).toString()}
+function dec(t){return CryptoJS.AES.decrypt(t,CHAT_CODE).toString(CryptoJS.enc.Utf8)}
 
-        if (img.files[0]) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            data.img = e.target.result;
-            data.expire = Date.now() + 60000;
-            ref.set(data);
-          };
-          reader.readAsDataURL(img.files[0]);
-        } else {
-          ref.set(data);
-        }
+function sendMsg(){if(!msg.value&&!img.files[0])return;const ref=db.ref('chat').push({u:user,t:msg.value?enc(msg.value):null,img:null,time:Date.now(),seen:false});if(img.files[0]){const r=new FileReader();r.onload=e=>ref.update({img:e.target.result,expire:Date.now()+60000});r.readAsDataURL(img.files[0]);}setTimeout(()=>ref.remove(),60000);msg.value='';img.value='';}
 
-        msg.value = "";
-        img.value = "";
-      }
+function listen(){db.ref('chat').on('child_added',s=>{const d=s.val();if(d.expire&&Date.now()>d.expire){s.ref.remove();return;}const div=document.createElement('div');div.className='bubble'+(d.u===user?' me':'');if(d.t)div.innerText=dec(d.t);if(d.img){const i=document.createElement('img');i.src=d.img;i.onclick=()=>i.classList.toggle('reveal');div.appendChild(i);}if(d.u===user){const tk=document.createElement('div');tk.className='tick';tk.innerText=d.seen?'✔✔':'✔';div.appendChild(tk);}chat.appendChild(div);chat.scrollTop=chat.scrollHeight;s.ref.update({seen:true});});
+msg.oninput=()=>{db.ref('typing').set(user);setTimeout(()=>db.ref('typing').remove(),800)};db.ref('typing').on('value',s=>typing.innerText=s.val()&&s.val()!==user?s.val()+" is typing…":"");}
 
-      function listen() {
-        const roomRef = db.ref("rooms/" + CHAT_ROOM_CODE);
-
-        roomRef.on("child_added", (snap) => {
-          const d = snap.val();
-          if (d.expire && Date.now() > d.expire) {
-            snap.ref.remove();
-            return;
-          }
-
-          const div = document.createElement("div");
-          div.className = "bubble" + (d.user === user ? " me" : "");
-
-          if (d.text) {
-            div.innerText = decrypt(d.text);
-          }
-
-          if (d.img) {
-            const im = document.createElement("img");
-            im.src = d.img;
-            im.onclick = () => im.classList.toggle("reveal");
-            div.appendChild(im);
-            setTimeout(() => snap.ref.remove(), 60000);
-          }
-
-          if (d.user === user) {
-            const tick = document.createElement("div");
-            tick.className = "tick";
-            tick.innerText = d.seen ? "✔✔" : "✔";
-            div.appendChild(tick);
-          }
-
-          chat.appendChild(div);
-          chat.scrollTop = chat.scrollHeight;
-          snap.ref.update({ seen: true });
-        });
-
-        msg.addEventListener("input", () => {
-          db.ref("typing/" + CHAT_ROOM_CODE).set(user);
-          setTimeout(() => db.ref("typing/" + CHAT_ROOM_CODE).remove(), 1000);
-        });
-
-        db.ref("typing/" + CHAT_ROOM_CODE).on("value", (s) => {
-          typing.innerText =
-            s.val() && s.val() !== user ? s.val() + " is typing…" : "";
-        });
-      }
-    </script>
-  </body>
+let rec,buf=[];
+function recordVoice(){navigator.mediaDevices.getUserMedia({audio:true}).then(s=>{rec=new MediaRecorder(s);rec.start();rec.ondataavailable=e=>buf.push(e.data);setTimeout(()=>{rec.stop();rec.onstop=()=>{const b=new Blob(buf,{type:'audio/webm'});buf=[];const r=new FileReader();r.onload=()=>db.ref('chat').push({u:user,audio:r.result,time:Date.now()});r.readAsDataURL(b)}},3000)})}
+</script>
+</body>
 </html>
