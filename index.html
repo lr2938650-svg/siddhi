@@ -4,60 +4,179 @@
 <meta charset="UTF-8">
 <title>Blind Friendship 💗</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
 <style>
-:root{--bg:#0f0f14;--card:#17171f;--accent:#ff5c8a;--soft:#2a2a35;--text:#fff;--muted:#b5b5c3}
+:root{
+ --bg:#f3e9ff;
+ --card:#ffffff;
+ --text:#3b3b3b;
+ --sky:#eaf6ff;
+ --sender:#e6d9ff;
+ --receiver:#ffe1ec;
+}
+body.dark{
+ --bg:#0f1117;
+ --card:#171a23;
+ --text:#f1f1f1;
+ --sky:#12151e;
+ --sender:#6a5cff;
+ --receiver:#ff6fae;
+}
+
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:Poppins;background:radial-gradient(circle at top,#1c1c28,var(--bg));color:var(--text)}
-.card{width:100%;max-width:430px;background:linear-gradient(180deg,var(--card),#121218);border-radius:18px;padding:24px}
+body{
+ margin:0;
+ min-height:100vh;
+ background:linear-gradient(135deg,var(--bg),#cfd9ff);
+ font-family:Poppins;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ padding:14px;
+ color:var(--text);
+ transition:.3s;
+}
+
+.card{
+ width:100%;
+ max-width:420px;
+ background:var(--card);
+ border-radius:22px;
+ padding:20px;
+ box-shadow:0 25px 60px rgba(0,0,0,.15);
+}
+
 .hidden{display:none}
-input,button{width:100%;padding:12px;border-radius:14px;border:none;margin-top:10px}
-input{background:var(--soft);color:#fff}
-button{background:linear-gradient(135deg,var(--accent),#ff85a8);cursor:pointer}
-.chatbox{height:260px;overflow-y:auto;background:var(--soft);padding:14px;border-radius:14px}
-.bubble{background:#242433;padding:8px 12px;border-radius:12px;margin-bottom:18px;max-width:85%;position:relative}
-.me{background:#ff5c8a;color:#000;margin-left:auto}
-.tick{font-size:11px;position:absolute;bottom:-14px;right:6px}
-img{max-width:100%;border-radius:10px;filter:blur(8px);cursor:pointer}
-img.reveal{filter:blur(0)}
-.small{font-size:12px;text-align:center;color:var(--muted)}
+input,button{
+ width:100%;
+ padding:13px;
+ border-radius:14px;
+ border:none;
+ font-family:Poppins;
+ margin-top:10px;
+}
+button{cursor:pointer}
+.primary{background:linear-gradient(135deg,#b49bff,#ff8dc7);color:#fff}
+.secondary{background:#e8e8f3}
+
+.chatroom{
+ background:var(--sky);
+ border-radius:18px;
+ padding:12px;
+}
+.chatbox{
+ height:280px;
+ overflow-y:auto;
+}
+
+.bubble{
+ padding:10px 14px;
+ border-radius:16px;
+ margin-bottom:12px;
+ max-width:80%;
+ position:relative;
+}
+.me{margin-left:auto;background:var(--sender)}
+.other{background:var(--receiver)}
+
+.tick{
+ font-size:11px;
+ position:absolute;
+ bottom:-14px;
+ right:8px;
+}
+
+img{
+ max-width:100%;
+ border-radius:12px;
+ filter:blur(6px);
+ cursor:pointer;
+}
+img.reveal{filter:none}
+
+.voice{
+ width:100%;
+ margin-top:6px;
+}
+
+.topbar{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:6px;
+}
+.toggle{
+ cursor:pointer;
+ font-size:14px;
+}
+
+.timer{
+ display:flex;
+ align-items:center;
+ gap:8px;
+ font-size:12px;
+ margin-top:6px;
+}
+
+@media(max-width:420px){
+ .chatbox{height:240px}
+}
 </style>
 </head>
 <body>
 
+<!-- STEP 1 -->
 <div class="card" id="step1">
-<input id="inviteName" placeholder="Your Name">
-<input id="inviteCode" placeholder="Invite Code">
-<button onclick="openMessage()">Continue</button>
+ <input id="inviteName" placeholder="Your name">
+ <input id="inviteCode" placeholder="Invite code">
+ <button class="primary" onclick="openMessage()">Continue</button>
 </div>
 
+<!-- STEP 2 -->
 <div class="card hidden" id="step2">
-<div class="small">Do you want to start Blind Friendship?</div>
-<button onclick="yesFlow()">Yes</button>
-<button onclick="noFlow()">No</button>
+ <p>Start Blind Friendship?</p>
+ <button class="primary" onclick="yesFlow()">Yes</button>
+ <button class="secondary" onclick="location.reload()">No</button>
 </div>
 
+<!-- LOGIN -->
 <div class="card hidden" id="stepLogin">
-<input id="chatCode" placeholder="Secret Chat Code">
-<button onclick="enterChat()">Enter Chat</button>
+ <input id="chatCode" placeholder="Secret chat code">
+ <button class="primary" onclick="enterChat()">Enter Chat</button>
 </div>
 
+<!-- CHAT -->
 <div class="card hidden" id="stepChat">
-<div class="small" id="status">Offline</div>
-<div class="chatbox" id="chat"></div>
-<div class="small" id="typing"></div>
-<input type="file" id="img" accept="image/*">
-<input id="msg" placeholder="Type message">
-<button onclick="sendMsg()">Send</button>
+ <div class="topbar">
+  <b>Blind Friendship</b>
+  <div class="toggle" onclick="toggleTheme()">🌙</div>
+ </div>
+
+ <div class="chatroom">
+  <div class="chatbox" id="chat"></div>
+ </div>
+
+ <div class="timer">
+  ⏳ Auto delete:
+  <input type="range" min="10" max="300" value="60" id="timer">
+  <span id="tval">60s</span>
+ </div>
+
+ <input type="file" id="img" accept="image/*">
+ <input id="msg" placeholder="Type something…">
+ <button class="primary" onclick="sendMsg()">Send</button>
+ <button class="secondary" onclick="recordVoice()">🎶 Voice</button>
 </div>
 
 <script>
 const INVITE_CODE="BLIND2026";
 const CHAT_CODE="ONLYUS";
-let ROOM="", user="";
+let ROOM="", user="", mediaRecorder, chunks=[];
 
 firebase.initializeApp({
  apiKey:"AIzaSyAdpLNU2c-C5KxJv2weJECSpoghz_NGNtM",
@@ -65,29 +184,27 @@ firebase.initializeApp({
 });
 const db=firebase.database();
 
+timer.oninput=()=>tval.innerText=timer.value+"s";
+
+function toggleTheme(){
+ document.body.classList.toggle("dark");
+}
+
 function openMessage(){
  if(inviteCode.value!==INVITE_CODE)return alert("Wrong invite code");
  user=inviteName.value;
  step1.classList.add("hidden");
  step2.classList.remove("hidden");
 }
-
 function yesFlow(){
  step2.classList.add("hidden");
  stepLogin.classList.remove("hidden");
 }
-
-function noFlow(){location.reload()}
-
 function enterChat(){
  if(chatCode.value!==CHAT_CODE)return alert("Wrong chat code");
  ROOM=CHAT_CODE;
  stepLogin.classList.add("hidden");
  stepChat.classList.remove("hidden");
-
- db.ref(`rooms/${ROOM}/users/${user}`).set({online:true,last:Date.now()});
- db.ref(`rooms/${ROOM}/users/${user}`).onDisconnect().set({online:false,last:Date.now()});
-
  listen();
 }
 
@@ -96,7 +213,8 @@ function dec(t){return CryptoJS.AES.decrypt(t,ROOM).toString(CryptoJS.enc.Utf8)}
 
 function sendMsg(){
  if(!msg.value && !img.files[0])return;
- const ref=db.ref(`rooms/${ROOM}/chat`).push({u:user,t:msg.value?enc(msg.value):null,seen:false});
+ const expire=Date.now()+timer.value*1000;
+ const ref=db.ref(`rooms/${ROOM}/chat`).push({u:user,t:msg.value?enc(msg.value):null,expire});
  if(img.files[0]){
   const r=new FileReader();
   r.onload=e=>ref.update({img:e.target.result});
@@ -108,8 +226,9 @@ function sendMsg(){
 function listen(){
  db.ref(`rooms/${ROOM}/chat`).on("child_added",s=>{
   const d=s.val();
+  if(d.expire && Date.now()>d.expire){s.ref.remove();return}
   const div=document.createElement("div");
-  div.className="bubble"+(d.u===user?" me":"");
+  div.className="bubble "+(d.u===user?"me":"other");
   if(d.t)div.innerText=dec(d.t);
   if(d.img){
    const i=document.createElement("img");
@@ -117,24 +236,31 @@ function listen(){
    i.onclick=()=>i.classList.toggle("reveal");
    div.appendChild(i);
   }
-  if(d.u===user){
-   const tk=document.createElement("div");
-   tk.className="tick";
-   tk.innerText=d.seen?"✔✔":"✔";
-   div.appendChild(tk);
+  if(d.audio){
+   const a=document.createElement("audio");
+   a.src=d.audio;a.controls=true;a.className="voice";
+   div.appendChild(a);
   }
   chat.appendChild(div);
   chat.scrollTop=chat.scrollHeight;
-  s.ref.update({seen:true});
  });
+}
 
- msg.oninput=()=>{
-  db.ref(`rooms/${ROOM}/typing`).set(user);
-  setTimeout(()=>db.ref(`rooms/${ROOM}/typing`).remove(),800);
- };
-
- db.ref(`rooms/${ROOM}/typing`).on("value",s=>{
-  typing.innerText=s.val() && s.val()!==user ? s.val()+" typing…" : "";
+function recordVoice(){
+ navigator.mediaDevices.getUserMedia({audio:true}).then(s=>{
+  mediaRecorder=new MediaRecorder(s);
+  mediaRecorder.start();
+  chunks=[];
+  mediaRecorder.ondataavailable=e=>chunks.push(e.data);
+  setTimeout(()=>{
+   mediaRecorder.stop();
+   mediaRecorder.onstop=()=>{
+    const blob=new Blob(chunks,{type:"audio/webm"});
+    const r=new FileReader();
+    r.onload=()=>db.ref(`rooms/${ROOM}/chat`).push({u:user,audio:r.result});
+    r.readAsDataURL(blob);
+   }
+  },3000);
  });
 }
 </script>
